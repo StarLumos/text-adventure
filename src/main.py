@@ -54,7 +54,7 @@ def main():
         if len(command) < 1:
             print("Please enter a command")
         elif len(command) == 1:
-            unary(command[0], player)
+            print(unary(command[0], player))
         elif len(command) == 2:
             binary(command, player)
 

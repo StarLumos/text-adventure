@@ -21,19 +21,19 @@ def who(player: Character) -> str:
 def where(player: Character) -> str:
     response = "You are at " + player.location.name
     if player.location.description != " ":
-        response += player.location.name + " is " + player.location.description
+        response += "\n" + player.location.name + " is " + player.location.description
     
     if player.location.paths == []:
-        response += "There are no connecting paths to this location."
+        response += "\nThere are no connecting paths to this location."
     else:
-        response += player.location.name + "is connected to" + " ".join(
+        response += "\n" + player.location.name + " is connected to " + " ".join(
             [ path.name for path in player.location.paths ])
     return response
 
 def inv(player: Character) -> str:
     response = "Your inventory:"
     if player.items == []:
-        response += "You have no items."
+        response += "\nYou have no items."
     else:
         for item in player.items:
             response += "-" + item.name
@@ -41,30 +41,33 @@ def inv(player: Character) -> str:
 
 def me(player: Character) -> str:
     response = "Your name is " + player.name
-    response += "Your health is " + str(player.health)
+    response += "\nYour health is " + str(player.health)
     if player.items == []:
-        response += "You have no items."
+        response += "\nYou have no items."
     else:
-        response += "Your item(s) is/are " + " ".join(
+        response += "\nYour item(s) is/are " + " ".join(
             [ item.name for item in player.items])
-    response += "Your location is " + player.location.name
+    response += "\nYour location is " + player.location.name
     return response
 
-def exit():
+def exit() -> str:
     return "You are now exiting the game. Thank you for playing!"
     quit()
 
-def unary(command: str, player: Character): 
+def unary(command: str, player: Character) -> str: 
+    result: str
     match command: 
         case "who":
-            who(player)
+            result = who(player)
         case "where":
-            where(player)
+            result = where(player)
         case "inv":
-            inv(player)
+            result = inv(player)
         case "me":
-            me(player)
+            result = me(player)
         case "exit":
-            exit()
+            result = exit()
         case _:
-            print("Invalid command. Please try again.")
+            result = "Invalid command. Please try again."
+
+    return result
