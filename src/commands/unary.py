@@ -1,8 +1,12 @@
 from __future__ import annotations
 from Character import Character
+from typing import Callable, Any, TypeAlias
+
+Callback: TypeAlias = Callable[[], Any]
+Response: TypeAlias = tuple[str, Callback | None]
 
 # imperative version, mostly pure but does contain local mutation to response
-def who(player: Character) -> str:
+def who(player: Character) -> Response:
     response = ""
     if len(player.location.characters) == 1:
         response = "There are no other characters at this location."
@@ -11,14 +15,14 @@ def who(player: Character) -> str:
         for character in player.location.characters:
             if character != player:
                 response += "-" + character.name
-    return response
+    return response, None
 
 # example of a 100% pure function, using an expressive/declarative 1-liner style 
 # def who(player: Character) -> str:
 #     return "There are no other characters at this location." if len(player.location.characters) == 1 else "These characters are nearby:" + ", ".join(
 #         [ character.name for character in player.location.characters if character != player])
 
-def where(player: Character) -> str:
+def where(player: Character) -> Response:
     response = "You are at " + player.location.name
     if player.location.description != " ":
         response += "\n" + player.location.name + " is " + player.location.description
@@ -28,18 +32,18 @@ def where(player: Character) -> str:
     else:
         response += "\n" + player.location.name + " is connected to " + " ".join(
             [ path.name for path in player.location.paths ])
-    return response
+    return response, None
 
-def inv(player: Character) -> str:
+def inv(player: Character) -> Response:
     response = "Your inventory:"
     if player.items == []:
         response += "\nYou have no items."
     else:
         for item in player.items:
             response += "-" + item.name
-    return response
+    return response, None
 
-def me(player: Character) -> str:
+def me(player: Character) -> Response:
     response = "Your name is " + player.name
     response += "\nYour health is " + str(player.health)
     if player.items == []:
@@ -48,14 +52,13 @@ def me(player: Character) -> str:
         response += "\nYour item(s) is/are " + " ".join(
             [ item.name for item in player.items])
     response += "\nYour location is " + player.location.name
-    return response
+    return response, None
 
-def exit() -> str:
-    return "You are now exiting the game. Thank you for playing!"
-    quit()
+def exit() -> Response:
+    return ("You are now exiting the game. Thank you for playing!", quit)
 
-def unary(command: str, player: Character) -> str: 
-    result: str
+def unary(command: str, player: Character) -> Response: 
+    result: Response
     match command: 
         case "who":
             result = who(player)
@@ -68,6 +71,6 @@ def unary(command: str, player: Character) -> str:
         case "exit":
             result = exit()
         case _:
-            result = "Invalid command. Please try again."
+            result = "Invalid command. Please try again.", None
 
     return result

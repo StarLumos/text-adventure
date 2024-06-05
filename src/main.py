@@ -53,11 +53,18 @@ def main():
 
         if len(command) < 1:
             print("Please enter a command")
+            continue
         elif len(command) == 1:
-            print(unary(command[0], player))
-        elif len(command) == 2:
-            binary(command, player)
-
+            message, callback = unary(command[0], player)
+        else:
+            continue # temporary fix
+        # elif len(command) == 2:
+        #     binary(command, player)
+    
+        print(message)
+        if callback != None:
+            callback()
+        
     # "attack john sword" (attack john with my sword)
 
 main()
