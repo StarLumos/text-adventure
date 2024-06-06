@@ -2,7 +2,8 @@ from __future__ import annotations
 from Character import Character
 from Location import Location
 from Item import Item
-from commands.unary import unary
+from commands.CommandOrchestrator import CommandOrchestrator
+from commands.Command import ExitCommand, WhoCommand, WhereCommand, InvCommand, MeCommand
 
 def binary(command: list[str], player: Character):
     if command[0] == "goto":
@@ -42,27 +43,25 @@ def main():
     print(f"Hello, {name}")
     player = Character(name, [], locationA)
     locationA.characters.append(player)
-
     itemA = Item("sword", 5000, "uncommon", locationA)
     locationA.items.append(itemA)
     itemB = Item("apple", 5, "common", locationA)
     locationA.items.append(itemB)
+    
+    orchestrator = CommandOrchestrator([
+        WhereCommand(), 
+        InvCommand(), 
+        WhoCommand(), 
+        MeCommand(), 
+        ExitCommand(), 
+    ], player)
 
     while True:
-        command = input("\nEnter your command: ").split(" ")
-
-        if len(command) < 1:
-            print("Please enter a command")
-            continue
-        elif len(command) == 1:
-            message, callback = unary(command[0], player)
-        else:
-            continue # temporary fix
-        # elif len(command) == 2:
-        #     binary(command, player)
-    
+        text = input("\nEnter your command: ")
+        message, callback = orchestrator.handle(text)
+        
         print(message)
-        if callback != None:
+        if callback is not None:
             callback()
         
     # "attack john sword" (attack john with my sword)
