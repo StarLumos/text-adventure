@@ -1,64 +1,49 @@
 from __future__ import annotations
+from Universe import Universe
 from Character import Character
 from Location import Location
 from Item import Item
 from commands.CommandOrchestrator import CommandOrchestrator
-from commands.Command import ExitCommand, WhoCommand, WhereCommand, InvCommand, MeCommand
-
-def binary(command: list[str], player: Character):
-    if command[0] == "goto":
-        if command[1] == player.location.name:
-            print("You are already at this location! Try again.")
-            return
-        for path in player.location.paths:
-            if command[1] == path.name:
-                player.location = path
-                print("You are now at", player.location.name)
-                return
-        print("Your requested location wasn't found. Try again.")
-    elif command[0] == "pickup":
-        for item in player.location.items:
-            if command[1] == item.name:
-                player.items.append(item)
-                player.location.items.remove(item)
-                print("You have now picked up", item.name, ". It is now in your inventory.")
-                return
-        print("This item is not in this location. Try again.")
-    elif command[0] == "drop":
-        for item in player.items:
-            if command[1] == item.name:
-                player.items.remove(item)
-                player.location.items.append(item)
-                print("You have now dropped", item.name, ". It is no longer in your inventory.")
-                return
-        print("You don't have this item in your inventory. Try again.")
+from commands.Command import WhoCommand, WhereCommand, InvCommand, MeCommand, GoToCommand, ExitCommand, PickUpCommand, DropCommand
+from effects.Effect import Burning
 
 def main():
-    locationA = Location("Castle", "a brick castle")
-    locationB = Location("Garden")
+    universe = Universe()
+    locationA = Location("the Castle", "a brick castle")
+    locationB = Location("the Garden")
     locationA.paths.append(locationB)
     locationB.paths.append(locationA)
+    universe.locations.append(locationA)
+    universe.locations.append(locationB)
     
     name = input("Enter your name: ")
     print(f"Hello, {name}")
-    player = Character(name, [], locationA)
-    locationA.characters.append(player)
+    player = Character(name, [])
+    universe.spawn(player, locationA)
     itemA = Item("sword", 5000, "uncommon", locationA)
-    locationA.items.append(itemA)
+    universe.spawn(itemA, locationA)
     itemB = Item("apple", 5, "common", locationA)
-    locationA.items.append(itemB)
+    universe.spawn(itemB, locationA)
     
     orchestrator = CommandOrchestrator([
+        WhoCommand(), 
         WhereCommand(), 
         InvCommand(), 
-        WhoCommand(), 
         MeCommand(), 
         ExitCommand(), 
+        GoToCommand(), 
+        PickUpCommand(),
+        DropCommand(),
     ], player)
+
+    effect = Burning(10, player)
+    player.effects.append(effect)
 
     while True:
         text = input("\nEnter your command: ")
         message, callback = orchestrator.handle(text)
+        
+        universe.update()
         
         print(message)
         if callback is not None:
