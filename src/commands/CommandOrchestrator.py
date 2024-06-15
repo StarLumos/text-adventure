@@ -9,7 +9,7 @@ class CommandOrchestrator:
         self.commands = commands
         self.player = player
     
-    def handle(self, text: str) -> Response:
+    def handle(self, text: str, delta: float) -> Response:
         tokens = text.split(" ")
         
         if len(tokens) == 0:
@@ -17,6 +17,6 @@ class CommandOrchestrator:
         
         for command in self.commands:
             if command.matches(tokens):
-                return command.execute(self.player, tokens)
+                return command.execute(self.player, tokens, delta)
             
         return ("Not a valid command! Please try again.", None)
