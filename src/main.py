@@ -1,5 +1,6 @@
 from __future__ import annotations
 from Universe import Universe
+from utilities import prompt, display
 from Character import Character, AICharacter
 from behaviors.constant.Perception import Perception
 from behaviors.dormant.ScavengerFood import ScavengeFood
@@ -27,9 +28,9 @@ def main():
     universe.locations.append(locationA)
     universe.locations.append(locationB)
     
-    name = input("Enter your name: ")
+    name = prompt("Enter your name", newlines = 0)
     player = Character(name, [])
-    print(f"Hello, {name}")
+    display(f"Hello, {name}")
 
     universe.spawn(player, locationA)
     itemA = Sword("excalibur", 5000, "uncommon", 10, 3, 94)
@@ -55,13 +56,24 @@ def main():
     effect = Burning(10, player)
     player.effects.append(effect)
 
+    plot = """
+Welcome to the game! You awake in a castle. You can see a garden to the north. You can't seem to remember anything... Except for a memory of an enchantress. You see a sword nearby...
+    """
+
+    tutorial = """
+[WELCOME]:
+To see the list of available actions, type 'help'
+"""
+
+    display(plot + tutorial)
+
     while True:
-        text = input("\nEnter your command: ")
+        text = prompt(delimiter = "> ")
         message, callback = orchestrator.handle(text, universe.time.delta)
 
         universe.update()
         
-        print(message)
+        display(message, newlines = 2)
         npc.health = 15
         if callback is not None:
             callback()
