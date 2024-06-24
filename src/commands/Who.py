@@ -7,7 +7,7 @@ class Who(Command):
     
     def execute(self, player: Character, tokens: list[str], delta: float) -> Response:
         message = ""
-        if len(player.location.characters) == 2:
+        if len(player.location.characters) == 1:
             message = "There are no other characters at this location."
         else:
             message = "These characters are nearby:"

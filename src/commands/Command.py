@@ -14,7 +14,7 @@ class Command(ABC):
         self.keyword = keyword
 
     def matches(self, tokens: list[str]) -> bool:
-        return tokens[0] == self.keyword
+        return tokens[0].lower() == self.keyword.lower()
 
     @abstractmethod
     def execute(self, player: Character, tokens: list[str], delta: float) -> Response:

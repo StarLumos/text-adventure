@@ -15,15 +15,12 @@ class Attack(Command):
             return "command usage: attack <target> <weapon>", None
         
         target = next((
-            character for character in player.location.characters if character.name == tokens[1]), None)
+            character for character in player.location.characters if character.name.lower() == tokens[1].lower()), None)
         if target is None:
             return "There is no character nearby with that name.", None
 
         weapon = next((
-            item for item in player.items if item.name == tokens[2] and isinstance(item, Weapon)), None)
-        for i in player.items:
-            print(i.name)
-            print(type(i))
+            item for item in player.items if item.name.lower() == tokens[2].lower() and isinstance(item, Weapon)), None)
         if weapon is None:
             return "There is no weapon in your inventory with that name.", None
         

@@ -6,7 +6,7 @@ class Drop(Command):
         super().__init__("drop")
     def execute(self, player: Character, tokens: list[str], delta: float) -> Response:
         for item in player.items:
-            if tokens[1] == item.name:
+            if tokens[1].lower() == item.name.lower():
                 player.items.remove(item)
                 player.location.items.append(item)
                 return "You have now dropped " + item.name + ". It is no longer in your inventory.", None
