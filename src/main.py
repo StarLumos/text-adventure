@@ -1,10 +1,11 @@
 from __future__ import annotations
 from Universe import Universe
+from Location import Location
+from highlight import blue, yellow, black
 from utilities import prompt, display
 from Character import Character, AICharacter
 from behaviors.constant.Perception import Perception
 from behaviors.dormant.ScavengerFood import ScavengeFood
-from Location import Location
 from items.Item import Item
 from commands.CommandOrchestrator import CommandOrchestrator
 from commands.Who import Who
@@ -30,7 +31,7 @@ def main():
     
     name = prompt("Enter your name", newlines = 0)
     player = Character(name, [])
-    display(f"Hello, {name}")
+    display(black("Hello, ") + blue(name))
 
     universe.spawn(player, locationA)
     itemA = Sword("excalibur", 5000, "uncommon", 10, 3, 94)
@@ -65,7 +66,7 @@ Welcome to the game! You awake in a castle. You can see a garden to the north. Y
 To see the list of available actions, type 'help'
 """
 
-    display(plot + tutorial)
+    display(black(plot + tutorial))
 
     while True:
         text = prompt(delimiter = "> ")

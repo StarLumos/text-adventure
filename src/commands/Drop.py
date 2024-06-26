@@ -1,5 +1,6 @@
 from commands.Command import Command, Response
 from Character import Character
+from highlight import red, yellow
 
 class Drop(Command):
     def __init__(self):
@@ -9,5 +10,5 @@ class Drop(Command):
             if tokens[1].lower() == item.name.lower():
                 player.items.remove(item)
                 player.location.items.append(item)
-                return "You have now dropped " + item.name + ". It is no longer in your inventory.", None
-        return "You don't have this item in your inventory. Try again.", None
+                return yellow(f'- {item.name}'), None
+        return red("You don't have this item in your inventory. Try again."), None

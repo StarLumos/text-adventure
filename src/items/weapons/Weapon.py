@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import Character
 from random import randrange
 from typing import NamedTuple
+from highlight import red, yellow, blue, magenta
 
 class WeaponUseResult(NamedTuple):
     used: bool
@@ -36,7 +37,7 @@ class Sword(Weapon):
         self.timer -= delta
         if self.timer > 0:
             return WeaponUseResult(
-                False, False, 0, "This weapon is on cooldown.")
+                False, False, 0, yellow("This weapon is on cooldown."))
         else:
             self.timer = self.cooldown
     
@@ -44,10 +45,10 @@ class Sword(Weapon):
         if chance <= self.accuracy:
             target.health -= self.damage
             return WeaponUseResult(
-                True, True, self.damage, f"Dealt -{self.damage} damage to {target.name}!\n  {target.health + self.damage}hp -> {target.health}hp")
+                True, True, self.damage, "Dealt " + magenta(f"-{self.damage} damage" + blue(target.name) + "!\n" + magenta(target.health + self.damage) + " hp -> " + magenta(target.health) + " hp"))
         else:
             return WeaponUseResult(
-                True, False, 0, "This weapon missed the target.")
+                True, False, 0, yellow("This weapon missed the target."))
 
 class Dagger(Weapon):
     ...
