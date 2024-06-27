@@ -1,5 +1,6 @@
 from commands.Command import Command, Response
 from Character import Character
+from highlight import yellow
 
 class CommandOrchestrator:
     commands: list[Command]
@@ -13,10 +14,10 @@ class CommandOrchestrator:
         tokens = text.split(" ")
         
         if len(tokens) == 0:
-            return ("Not a valid command! Please try again.", None)
+            return (yellow("Not a valid command! Please try again."), None)
         
         for command in self.commands:
             if command.matches(tokens):
                 return command.execute(self.player, tokens, delta)
             
-        return ("Not a valid command! Please try again.", None)
+        return (yellow("Not a valid command! Please try again."), None)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from Universe import Universe
 from Location import Location
-from highlight import blue, yellow, black
+from highlight import blue, black
 from utilities import prompt, display
 from Character import Character, AICharacter
 from behaviors.constant.Perception import Perception
@@ -29,7 +29,7 @@ def main():
     universe.locations.append(locationA)
     universe.locations.append(locationB)
     
-    name = prompt("Enter your name", newlines = 0)
+    name = prompt(black("Enter your name"), newlines = 0)
     player = Character(name, [])
     display(black("Hello, ") + blue(name))
 

@@ -1,6 +1,8 @@
 import time
 import sys
 
+from highlight import black
+
 def display(message: str, delay: float = 0.05, newlines: int = 1) -> None:
     for char in message:
         sys.stdout.write(char)
@@ -9,6 +11,6 @@ def display(message: str, delay: float = 0.05, newlines: int = 1) -> None:
     if newlines > 0:
         sys.stdout.write("\n" * newlines)
 
-def prompt(message: str = "", delimiter: str = ": ", delay: float = 0.05, newlines: int = 0) -> str:
+def prompt(message: str = "", delimiter: str = black(": "), delay: float = 0.05, newlines: int = 0) -> str:
     display(message + delimiter, delay, newlines)
     return input()

@@ -10,5 +10,5 @@ class Drop(Command):
             if tokens[1].lower() == item.name.lower():
                 player.items.remove(item)
                 player.location.items.append(item)
-                return yellow(f'- {item.name}'), None
+                return red(f'- {item.name}'), None
         return red("You don't have this item in your inventory. Try again."), None

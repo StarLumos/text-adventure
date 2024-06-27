@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 import Character
 from random import randrange
 from typing import NamedTuple
-from highlight import red, yellow, blue, magenta
+from highlight import black, red, yellow, blue, magenta
 
 class WeaponUseResult(NamedTuple):
     used: bool
@@ -44,8 +44,13 @@ class Sword(Weapon):
         chance = randrange(0, 100)
         if chance <= self.accuracy:
             target.health -= self.damage
+            message = blue(f"{user.name}") + black("dealt ") + magenta(f"{self.damage} damage ") + black("to ") + blue(target.name) + black("!\n\t") + magenta(target.health + self.damage) + magenta("hp -> ") + magenta(target.health) + magenta("hp")
+            if target.health <= 0:
+                message += "\n" + blue(target.name) + black(" has died! You've won the battle!")
+            if user.health <= 0:
+                message += "\n" + black("You've ") +  red("died ") +  black("and lost the battle.")
             return WeaponUseResult(
-                True, True, self.damage, "Dealt " + magenta(f"-{self.damage} damage" + blue(target.name) + "!\n" + magenta(target.health + self.damage) + " hp -> " + magenta(target.health) + " hp"))
+                True, True, self.damage, message)
         else:
             return WeaponUseResult(
                 True, False, 0, yellow("This weapon missed the target."))
